@@ -1,35 +1,25 @@
 var Suit = require('./Suit');
 var Card = require('./Card');
 var Deck = require('./Deck');
-var Channels = require('./Channels');
-const { subscriber, publisher } = require('./PubSub');
 const Player = require('./Player');
 const Round = require('./Round');
+const Move = require('./Move');
 
-function Game() {
-    this._init();
+function Game(deck) {
+    this._deck = deck;
     this._players = [4];
     this._teams = {
-        "red": { current: 0 },
-        "blue": { current: 1 }
+        "red": { current: 0, currentPoint: 0 },
+        "blue": { current: 1, currentPoint: 0 }
     }
-    this._currentRound = {};
+
+    this._currentHand = [];
+    this._turnIndex = 0;
 }
 
-Game.prototype._init = function () {
-    var cards = Game.createCards();
-    this._deck = new Deck(cards);
-
-    // //console.log(this._deck.getCards());
-    // this._deck.shuffle();
-    // //console.log(this._deck.getCards());
-    // console.log(this._deck.count());
-    // console.log(this._deck.nextCard());
-    // console.log(this._deck.count());
-    // this._deck.reset();
-    // console.log(this._deck.count());
-    // console.log(this._deck.getCards());
-};
+Game.prototype.getCurrentHand= function(){
+    return this._currentHand;
+}
 Game.createCards = function () {
     var pointsDict = {
         "7": 0,
@@ -90,41 +80,89 @@ Game.prototype.deal = function () {
     }
 }
 
-Game.prototype.setRound = function (trump,bidderTeam,bidPoint) {
-    this._currentRound = new Round(trump,bidderTeam,bidPoint);
+Game.prototype.setRound = function (trump, bidderTeam, bidPoint) {
+    this._currentRound = new Round(trump, bidderTeam, bidPoint);
 }
 
-var game = new Game();
-
-for (var key in Channels) {
-    var value = Channels[key];
-    subscriber.subscribe(value);
+Game.prototype.getRound = function () {
+    return this._currentRound;
 }
 
-subscriber.on("message", function (channel, message) {
-    console.log("Subscriber received message in channel '" + channel + "': " + message);
-    var obj = message != "" ? JSON.parse(message) : {};
-    switch (channel) {
-        case Channels.JOIN_PLAYER:
-            var player = game.addPlayer(obj.id, obj.name, obj.team);
-            if (player != null)
-                publisher.publish(Channels.PLAYER_JOINED, JSON.stringify(player));
-            if (game.isLobbyFull()) {
-                publisher.publish(Channels.LOBBY_FULLED, "");
-            }
-            break;
-        case Channels.PLAYER_JOINED:
-            break;
-        case Channels.LOBBY_FULLED:
-            //console.log([...game.getPlayers()]);
-            break;
-        case Channels.ROUND_START:
-            game.deal();
-            break;
-        case Channels.SET_ROUND:
-            game.setRound(obj.trump,obj.bidderTeam,obj.bidPoint)
-            game.deal();
-            console.log(game);
-            break;
+Game.prototype.addMove = function (playerId, card) {
+    var move = new Move(playerId, card);
+    this._currentHand.push(move);
+    var player = this.getPlayer(playerId);
+    player.removeCard(card);
+
+}
+Game.prototype.getCurrentHandMoveCount = function (obj) {
+    return this._currentHand.length;
+}
+
+Game.prototype.getHandWinner = function () {
+
+    if (this._currentRound.isTrumpOpen()) {
+        var trumpMoves = this.getCurrentHandSuitMoves(this._currentRound.getTrumpSuit());
+        if (trumpMoves.length != 0) {
+            return Game.getMaxMove(trumpMoves);
+        }
     }
-});
+
+    var currentHandSuit = this._currentHand[0].getCard().getSuit();
+    var moves = this.getCurrentHandSuitMoves(currentHandSuit);
+    return Game.getMaxMove(moves);
+
+}
+
+Game.prototype.getHandPoints = function () {
+    //TODO implement hand point
+    return this._currentHand.reduce(function (total, hand) {
+        return total + hand.getCard().getPoint();
+    }, 0);
+}
+
+Game.prototype.resetHand = function () {
+    this._currentHand = [];
+}
+
+Game.getMaxMove = function (moves) {
+    moves.sort(function (a, b) { return b.getCard().getPrecedence() - a.getCard().getPrecedence() });
+    return moves[0];
+}
+
+Game.prototype.getCurrentHandSuitMoves = function (suit) {
+    var newArray = this._currentHand.filter(function (move) {
+        return move.getCard().getSuit() == suit;
+    });
+    return newArray;
+}
+
+Game.prototype.getPlayer = function (playerId) {
+    return this._players.find(element => element.getId() == playerId);
+}
+
+Game.prototype.getPlayerIndex = function (player) {
+    return this._players.indexOf(player)
+}
+
+Game.prototype.setTeamPoint = function (teamName, point) {
+    var team = this._teams[teamName];
+    team.currentPoint += point;
+}
+Game.prototype.getTeamPoint = function (teamName) {
+    var team = this._teams[teamName];
+    return team.currentPoint;
+}
+Game.prototype.getTurnIndex = function () {
+    return this._turnIndex % 4;
+}
+
+Game.prototype.setNextTurnIndex = function () {
+    this._turnIndex++;
+}
+Game.prototype.setTurnIndex = function (index) {
+    this._turnIndex = index;
+}
+
+
+module.exports = Game

@@ -1,1 +1,12 @@
 **/node_modules
+after-avijeet.json
+after-naveen.json
+after-rajeev.json
+after-verma.json
+before-avijeet.json
+before-naveen.json
+before-rajeev.json
+before-verma.json
+game-cards.txt
+public/cards/**
+public/bundle.js

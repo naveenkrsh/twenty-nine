@@ -5,4 +5,11 @@ function Round(trump,bidderTeam,bidPoint){
     this._isTrumpOpen = false;
 }
 
+Round.prototype.isTrumpOpen= function(){
+    return this._isTrumpOpen;
+}
+Round.prototype.getTrumpSuit = function(){
+    return this._trump;
+}
+
 module.exports = Round

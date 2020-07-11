@@ -31,7 +31,7 @@ Deck.prototype.count= function() {
 
 Deck.prototype.reset = function(){
     this._top = this._cards.length-1;
-    this.shuffle();
+    //this.shuffle();
 }
 
 module.exports= Deck;
