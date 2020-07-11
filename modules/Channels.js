@@ -1,0 +1,13 @@
+
+
+var Channels = {
+    JOIN_PLAYER:"JOIN_PLAYER",
+    PLAYER_JOINED: "PLAYER_JOINED",
+    PLAYER_QUEUED: "PLAYER_QUEUED",
+    LOBBY_FULLED: "LOBBY_FULLED",
+    ROUND_START: "ROUND_START",
+    SET_ROUND: "SET_ROUND",
+    TEST: "TEST"
+};
+
+module.exports = Channels;
