@@ -8,6 +8,7 @@ var app = require('../app');
 var debug = require('debug')('twenty-nine:server');
 var http = require('http');
 
+
 /**
  * Get port from environment and store in Express.
  */
@@ -21,16 +22,7 @@ app.set('port', port);
 
 var server = http.createServer(app);
 
-const io = require('socket.io')(server);
-
-io.on('connect', socket => {
-  let counter = 0;
-  console.log(socket.id);
-  socket.on('player', (data) => {
-    console.log(data);
-  });
-});
-
+var socketio = require('../socketio')(server);
 
 /**
  * Listen on provided port, on all network interfaces.

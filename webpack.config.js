@@ -1,24 +1,56 @@
-const path = require('path');
-module.exports = {
-    "mode": "none",
-    "entry": "./src/index.js",
-    "output": {
-        "path": __dirname + '/public',
-        "filename": "bundle.js"
-    },
-    // devServer: {
-    //     contentBase: path.join(__dirname, 'dist')
-    // }
+function getStyleUse(bundleFilename) {
+    return [
+        {
+            loader: 'file-loader',
+            options: {
+                name: bundleFilename,
+            },
+        },
+        { loader: 'extract-loader' },
+        { loader: 'css-loader' },
+        {
+            loader: 'sass-loader',
+            options: {
+                sassOptions: {
+                    indentWidth: 4,
+                    includePaths: ['./node_modules'],
+                },
+                implementation: require('dart-sass')
+            }
+        }
+    ];
+}
 
+const path = require('path');
+module.exports = [{
+    entry: './src/styles/main.scss',
+    output: {
+        // This is necessary for webpack to compile, but we never reference this js file.
+        "path": __dirname + '/public',
+        filename: 'style-bundle.js',
+    },
+    module: {
+        rules: [{
+            test: /main.scss$/,
+            use: getStyleUse('bundle.css')
+        },
+        {
+            test: /\.(svg|png|jpe?g|gif)$/i,
+            loader: 'file-loader',
+            options: {
+                name: 'images/[name].[ext]',
+            },
+        }]
+    },
+},
+{
+    entry: "./src/index.js",
+    output: {
+        "path": __dirname + '/public',
+        filename: "bundle.js"
+    },
     "module": {
         "rules": [
-            {
-                "test": /\.css$/,
-                "use": [
-                    "style-loader",
-                    "css-loader"
-                ]
-            },
             {
                 "test": /\.js$/,
                 "exclude": /node_modules/,
@@ -30,14 +62,8 @@ module.exports = {
                         ]
                     }
                 }
-            },
-            {
-                test: /\.(svg|png|jpe?g|gif)$/i,
-                loader: 'file-loader',
-                options: {
-                  name: 'cards/[name].[ext]',
-                },
-              },
+            }
         ]
     }
-}
+}]
+

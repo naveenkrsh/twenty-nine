@@ -4,56 +4,75 @@
 <head>
     <title>Page Title</title>
     <!-- <link rel="stylesheet" href="./styles.css"> -->
+    <link rel="stylesheet" href="https://fonts.googleapis.com/icon?family=Material+Icons">
+    <link href="https://fonts.googleapis.com/css?family=Roboto:300,400,500" rel="stylesheet">
     <script src="/socket.io/socket.io.js"></script>
-    <script src="./bundle.js"></script>
+    <link rel="stylesheet" href="bundle.css">
+    <link rel="stylesheet" href="card.css">
 </head>
 
-<body>
+<body class="mdc-typography">
 
-    <div class="card-holder">
-        <div class="back"></div>
-        <div class="card ace clubs"></div>
+    <header class="mdc-top-app-bar">
+        <div class="mdc-top-app-bar__row">
+            <section class="mdc-top-app-bar__section mdc-top-app-bar__section--align-start">
+                <span class="mdc-top-app-bar__title">Twenty Nine</span>
+            </section>
+
+            <section class="mdc-top-app-bar__section mdc-top-app-bar__section--align-end" role="toolbar">
+                <span class="mdc-top-app-bar__title show-username">Welcome</span>
+            </section>
+        </div>
+
+    </header>
+    <div class="main mdc-top-app-bar--fixed-adjust">
+        <div class="mdc-dialog">
+            <div class="mdc-dialog__container">
+                <div class="mdc-dialog__surface" role="alertdialog" aria-modal="true" aria-labelledby="my-dialog-title"
+                    aria-describedby="my-dialog-content">
+                    <!-- Title cannot contain leading whitespace due to mdc-typography-baseline-top() -->
+                    <h2 class="mdc-dialog__title" id="my-dialog-title">
+                        <!--
+           -->Enter Your Name
+                        <!--
+         -->
+                    </h2>
+                    <div class="mdc-dialog__content" id="my-dialog-content">
+                        <div class="mdc-text-field mdc-text-field--outlined username">
+                            <input class="mdc-text-field__input" id="text-field-hero-input">
+                            <div class="mdc-notched-outline mdc-notched-outline--no-label">
+                                <div class="mdc-notched-outline__leading"></div>
+                                <div class="mdc-notched-outline__notch">
+                                    <label for="text-field-hero-input" class="mdc-floating-label"></label>
+                                </div>
+                                <div class="mdc-notched-outline__trailing"></div>
+                            </div>
+                        </div>
+
+                    </div>
+                    <div class="mdc-dialog__actions">
+                        <button type="button" class="mdc-button mdc-dialog__button"
+                            data-mdc-dialog-action="save-user-name">
+                            <div class="mdc-button__ripple"></div>
+                            <span class="mdc-button__label">Save</span>
+                        </button>
+                    </div>
+                </div>
+            </div>
+
+        </div>
     </div>
-    <div class="card-holder">
-        <div class="back"></div>
-        <div class="card king clubs"></div>
-    </div>
-    <!-- <div class="card-holder">
-        <div class="back"></div>
-        <div class="card queen clubs"></div>
-    </div>
-    <div class="card-holder">
-        <div class="back"></div>
-        <div class="card jack clubs"></div>
-    </div>
-    <div class="card-holder">
-        <div class="back"></div>
-        <div class="card ten clubs"></div>
-    </div>
-    <div class="card-holder">
-        <div class="back"></div>
-        <div class="card ace hearts"></div>
-    </div>
-    <div class="card-holder">
-        <div class="back"></div>
-        <div class="card king hearts"></div>
-    </div>
-    <div class="card-holder">
-        <div class="back"></div>
-        <div class="card queen hearts"></div>
-    </div>
-    <div class="card-holder">
-        <div class="back"></div>
-        <div class="card jack hearts"></div>
-    </div>-->
-    <div class="card-holder">
-        <div class="back"></div>
-        <div class="card ten hearts"></div>
-    </div> 
-    <div class="card-holder">
-        <div class="back"></div>
-        <div class="new-card ten-hearts"></div>
-    </div>
+    <footer>
+        <div class="deck">
+        </div>
+        <div>
+            <h1 class="mdc-typography--headline4">naveen</h1>
+        <div>
+    </footer>
+    <script>
+        console.log(document);
+    </script>
+    <script src="./bundle.js" async></script>
 </body>
 
 </html>

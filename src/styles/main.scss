@@ -1,0 +1,26 @@
+@use "@material/theme" with (
+  $primary: #9c27b0,
+  $secondary: #76ff03,
+  $background: #fff,
+);
+@use "@material/button";
+@use "@material/dialog";
+@use "@material/textfield";
+@use "@material/notched-outline/mdc-notched-outline";
+@use "@material/icon-button";
+@use "@material/top-app-bar/mdc-top-app-bar";
+@use "@material/ripple";
+@use "@material/typography/mdc-typography";
+
+//@use "material-components-web";
+
+@import "@material/layout-grid/mdc-layout-grid";
+
+@include icon-button.core-styles;
+@include button.core-styles;
+@include dialog.core-styles;
+@include textfield.core-styles;
+@include icon-button.core-styles;
+
+// @import "./cards";
+@import "./custom";
